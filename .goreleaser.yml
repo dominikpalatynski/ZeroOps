@@ -1,3 +1,5 @@
+version: 2
+
 project_name: zeroops
 
 dist: dist
@@ -13,7 +15,6 @@ builds:
     goarch:
       - amd64
       - arm64
-    go_binary: '{{ .ProjectName }}{{ if eq .Os "windows" }}.exe{{ end }}'
 
 archives:
   - id: default
