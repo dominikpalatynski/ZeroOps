@@ -1,0 +1,46 @@
+version: 2
+
+project_name: zeroops
+
+dist: dist
+
+builds:
+  - id: zeroops
+    main: ./main.go
+    binary: zeroops
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: default
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - zeroops*
+      - LICENSE
+      - README.md
+
+release:
+  github:
+    owner: DominikPalatynski
+    name: zeroops
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "snapshot"

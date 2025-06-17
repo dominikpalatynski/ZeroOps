@@ -1,0 +1,3 @@
+dist/
+.env
+docker-compose.tpl.yml
