@@ -24,8 +24,7 @@ archives:
         format: zip
     files:
       - zeroops*
-      - LICENSE
-      - README.md
+
 
 release:
   github:
