@@ -6,7 +6,7 @@ dist: dist
 
 builds:
   - id: zeroops
-    main: ./cmd/main.go
+    main: ./main.go
     binary: zeroops
     goos:
       - linux
