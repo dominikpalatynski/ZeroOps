@@ -20,6 +20,9 @@ type Context struct {
 	Key  string
 }
 
+var envFilePath string
+var templatePath string
+
 var DeployCommand = &cli.Command{
 	Name:  "deploy",
 	Usage: "Manage deployments",
@@ -27,6 +30,20 @@ var DeployCommand = &cli.Command{
 		{
 			Name:  "add",
 			Usage: "Render docker-compose, send to VPS, and deploy",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:        "env_file",
+					Usage:       "Path to the .env file",
+					Value:       ".env",
+					Destination: &envFilePath,
+				},
+				&cli.StringFlag{
+					Name:        "template",
+					Usage:       "Path to the template file",
+					Value:       "docker-compose.tpl.yml",
+					Destination: &templatePath,
+				},
+			},
 			Action: func(c *cli.Context) error {
 				appName := c.Args().First()
 				if appName == "" {
@@ -39,12 +56,15 @@ var DeployCommand = &cli.Command{
 
 				remotePath := fmt.Sprintf("/apps/%s", appName)
 
-				env, err := loadEnv(".env")
+				fmt.Printf("Using env file: %s\n", envFilePath)
+				env, err := loadEnv(envFilePath)
 				if err != nil {
-					return fmt.Errorf("❌ Failed to read .env: %w", err)
+					return fmt.Errorf("❌ Failed to read env file %s: %w", envFilePath, err)
 				}
 
-				rendered, err := renderTemplate("docker-compose.tpl.yml", env)
+				fmt.Printf("Using template: %s\n", templatePath)
+
+				rendered, err := renderTemplate(templatePath, env)
 				if err != nil {
 					return fmt.Errorf("❌ Failed to render template: %w", err)
 				}
@@ -67,7 +87,7 @@ var DeployCommand = &cli.Command{
 				if err := scpWithSudo(ctx, "docker-compose.yml", remotePath+"/docker-compose.yml"); err != nil {
 					return err
 				}
-				if err := scpWithSudo(ctx, ".env", remotePath+"/.env"); err != nil {
+				if err := scpWithSudo(ctx, envFilePath, remotePath+"/.env"); err != nil {
 					return err
 				}
 

@@ -16,6 +16,7 @@ func main() {
 		Commands: []*cli.Command{
 			cmd.ContextCommand,
 			cmd.DeployCommand,
+			cmd.ProxyCommand,
 		},
 	}
 

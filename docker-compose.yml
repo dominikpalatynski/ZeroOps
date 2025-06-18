@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  nextjs:
+    image: ghcr.io/toolshedgit/zswojtczak-site:1.1.0
+    ports:
+      - "3008:3000"
+    environment:
+      - RESEND_API_KEY=re_1234567890abcdef
